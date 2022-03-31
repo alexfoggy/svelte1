@@ -2,7 +2,7 @@
 	import {
 		onMount
 	} from "svelte";
-	const endpoint = "http://chat/api/todo";
+	const endpoint = "https://yolly.pro/api/todo";
 	let todoList = [];
 
 	onMount(async function () {
@@ -20,7 +20,7 @@
 	let errorMsg = '';
 
 	async function deleteElement(id, index) {
-		const res = await fetch('http://chat/api/todo/delete', {
+		const res = await fetch('https://yolly.pro/api/todo/delete', {
 			method: 'POST',
 			body: JSON.stringify({
 				id
@@ -36,7 +36,7 @@
 	}
 
 	async function createNewEl() {
-		const res = await fetch('http://chat/api/todo/create', {
+		const res = await fetch('https://yolly.pro/api/todo/create', {
 			method: 'POST',
 			body: JSON.stringify({
 				valueInput,
@@ -63,7 +63,7 @@
 	}
 	else {
 		todoList[index].status = !todoList[index].status;
-		const res = await fetch('http://chat/api/todo/changestatus', {
+		const res = await fetch('https://yolly.pro/api/todo/changestatus', {
 			method: 'POST',
 			body: JSON.stringify({
 				id,
@@ -75,20 +75,8 @@
 
 	}
 
-	// async function editStatus(index, id) {
-	// 	todoList[index].status = !todoList[index].status;
-	// 	const res = await fetch('http://chat/api/todo/changestatus', {
-	// 		method: 'POST',
-	// 		body: JSON.stringify({
-	// 			id,
-	// 			status: todoList[index].status,
-	// 		})
-	// 	})
-
-	// }
-
 	async function updateElement(index, id) {
-		const res = await fetch('http://chat/api/todo/update', {
+		const res = await fetch('https://yolly.pro/api/todo/update', {
 			method: 'POST',
 			body: JSON.stringify({
 				id,
@@ -102,7 +90,7 @@
 	
 	
 	function editElement(index, id) {
-		if(updateIndex == index){
+		if(updateIndex === index){
 			updateStatus = !updateStatus;
 			updateValue = activeStatus =  activeIndex = updateIndex = '';
 		}
@@ -119,8 +107,8 @@
 <div class="container mx-auto mt-5">
 
 	<div class="flex justify-center items-center">
-		<input type="text" bind:value={valueInput} class="px-3 py-2 rounded border">
-		<button class="ml-2 px-2 py-2 bg-black text-white rounded border" on:click={createNewEl}>Create</button>
+		<input type="text" bind:value={valueInput} placeholder="Type here...." class="px-3 py-2 rounded border">
+		<button class="ml-2 px-2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded border" on:click={createNewEl}>Create</button>
 	</div>
 
 	<div class="w-1/3 mx-auto border rounded px-4 py-4 mt-10">
@@ -135,7 +123,7 @@
 		</div>
 		<ul>
 			{#each todoList as el,index}
-			<li class="{el.status == true ? 'active' : ''} flex align-center justify-between px-4 mb-4 py-2 border rounded transition"> 
+			<li class="{el.status == true ? 'active' : ''} {activeStatus == el.id ? 'editmode' : ''} flex align-center justify-between px-4 mb-4 py-2 border rounded transition"> 
 				<span class="text-lg cursor-pointer hover:text-sky-600" on:click="{()=>changeStatus(index,el.id)}">
 					{el.value}
 				</span>
@@ -163,9 +151,6 @@
 </div>
 
 <style>
-	body {
-		font-family: 'Poppins', sans-serif;
-	}
 	li.active {
 		opacity: 0.8;
 		background-color: #eee;
@@ -175,5 +160,21 @@
 	.editbutton.active {
 		opacity:0.7;
 		transform: rotateY(180deg);
+	}
+	.editmode {
+		transition: 0.4s;
+		position: relative;
+	}
+	.editmode::before {
+		content: 'editing';
+		position: absolute;
+		right: calc(100% + 10px);
+		font-size: 12px;
+		padding: 4px 10px;
+		font-weight: 700;
+		background-color: rgb(138, 39, 219);
+		color: #fff;
+		border-radius: 6px;
+		text-transform: uppercase;
 	}
 </style>
