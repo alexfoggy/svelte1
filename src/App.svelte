@@ -36,6 +36,7 @@
 	}
 
 	async function createNewEl() {
+		if(valueInput != ''){
 		const res = await fetch('https://yolly.pro/api/todo/create', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -50,6 +51,14 @@
 
 		todoList = [json, ...todoList];
 		valueInput = '';
+		}
+		else {
+			error = true;
+			errorMsg = 'Cannot be empty';
+			setTimeout(() => {
+				error = false
+			}, 3000);
+		}
 	}
 
 	async function changeStatus(index, id) {
@@ -113,7 +122,7 @@
 
 	<div class="w-1/3 mx-auto border rounded px-4 py-4 mt-10">
 
-		<div class="{error == false ? 'hidden' : ''} bg-rose-600 rounded flex py-2 justify-center text-white">
+		<div class="{error == false ? 'hidden' : ''} bg-rose-600 rounded flex py-2 my-4 justify-center text-white">
 			{errorMsg}
 		</div>
 
