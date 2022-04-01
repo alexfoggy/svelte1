@@ -45,7 +45,7 @@
 			})
 		})
 
-		const json = await res.json()
+		const json = await res.json();
 
 		console.log(json);
 
@@ -62,8 +62,7 @@
 	}
 
 	async function changeStatus(index, id) {
-
-		if(updateIndex == index){
+		if(updateIndex === index){
 			error = true;
 			errorMsg = 'Cannot check task while its in change mode';
 			setTimeout(() => {
@@ -80,6 +79,7 @@
 			})
 		})
 		error = false;
+		updateIndex = '';
 	}
 
 	}
@@ -117,7 +117,7 @@
 
 	<div class="flex justify-center items-center">
 		<input type="text" bind:value={valueInput} placeholder="Type here...." class="px-3 py-2 rounded border">
-		<button class="ml-2 px-2 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded border" on:click={createNewEl}>Create</button>
+		<button class="ml-2 px-2 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded border" on:click={createNewEl}>Create</button>
 	</div>
 
 	<div class="w-1/3 mx-auto border rounded px-4 py-4 mt-10">
@@ -163,8 +163,28 @@
 	li.active {
 		opacity: 0.8;
 		background-color: #eee;
+		transition: 1s;
+	}
+	li {
 		position: relative;
-		transition: 0.4s;
+	}
+	li::before {
+		content: 'in work';
+		white-space: nowrap;
+		position: absolute;
+		right: calc(100% + 10px);
+		font-size: 12px;
+		padding: 4px 10px;
+		font-weight: 700;
+		background-color: rgb(25, 91, 177);
+		color: #fff;
+		border-radius: 6px;
+		transition: 1s;
+		text-transform: uppercase;
+	}
+	li.active::before {
+		content: 'done';
+		background-color: rgb(30, 175, 74);
 	}
 	.editbutton.active {
 		opacity:0.7;
