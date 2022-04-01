@@ -8,16 +8,17 @@
 	onMount(async function () {
 		const response = await fetch(endpoint);
 		todoList = await response.json();
+		loading = false;
 	});
-
-	let valueInput = '';
-	let updateValue = '';
+	let loading = true;
+	let valueInput = null;
+	let updateValue = null;
 	let updateStatus = false;
-	let activeStatus = '';
-	let activeIndex = '';
-	let updateIndex = '';
+	let activeStatus = null;
+	let activeIndex = null;
+	let updateIndex = null;
 	let error = false;
-	let errorMsg = '';
+	let errorMsg = null;
 
 	async function deleteElement(id, index) {
 		const res = await fetch('https://yolly.pro/api/todo/delete', {
@@ -28,8 +29,6 @@
 		})
 
 		const json = await res.json()
-
-		console.log(json);
 
 		todoList.splice(index, 1)
 		todoList = todoList;
@@ -47,10 +46,9 @@
 
 		const json = await res.json();
 
-		console.log(json);
-
 		todoList = [json, ...todoList];
-		valueInput = '';
+		updateValue = activeStatus =  activeIndex = updateIndex = valueInput = '';
+
 		}
 		else {
 			error = true;
@@ -79,7 +77,7 @@
 			})
 		})
 		error = false;
-		updateIndex = '';
+		updateIndex = null;
 	}
 
 	}
@@ -93,7 +91,7 @@
 			})
 		})
 		todoList[index].value = updateValue;
-		updateValue = activeIndex = activeStatus = '';
+		updateValue = activeIndex = activeStatus = updateIndex = null;
 		updateStatus = false;
 	}
 	
@@ -101,7 +99,7 @@
 	function editElement(index, id) {
 		if(updateIndex === index){
 			updateStatus = !updateStatus;
-			updateValue = activeStatus =  activeIndex = updateIndex = '';
+			updateValue = activeStatus = activeIndex = updateIndex = null;
 		}
 		else {
 			activeStatus = id;
@@ -131,9 +129,10 @@
 			<button class="ml-2 px-2 py-2 bg-green-500 text-white rounded border" on:click="{updateElement(activeIndex , activeStatus)}">Update</button>
 		</div>
 		<ul>
+			{#if todoList != ''}
 			{#each todoList as el,index}
-			<li class="{el.status == true ? 'active' : ''} {activeStatus == el.id ? 'editmode' : ''} flex align-center justify-between px-4 mb-4 py-2 border rounded transition"> 
-				<span class="text-lg cursor-pointer hover:text-sky-600" on:click="{()=>changeStatus(index,el.id)}">
+			<li class="{el.status == true ? 'active' : ''} {activeStatus == el.id ? 'editmode' : ''} flex items-center justify-between px-4 mb-4 py-2 border rounded-lg transition"> 
+				<span class="text-lg cursor-pointer hover:text-sky-600 pr-4" on:click="{()=>changeStatus(index,el.id)}">
 					{el.value}
 				</span>
 				<div class="flex">
@@ -144,7 +143,7 @@
 						<path d="M15 6L18 9" stroke="#fff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
 						</svg>
 				</div>
-				<div class="delete ml-1 px-2 cursor-pointer bg-rose-600 hover:bg-rose-800 transition
+				<div class="delete ml-1 px-2 py-2 cursor-pointer bg-rose-600 hover:bg-rose-800 transition
 					text-white flex justify-center items-center rounded" on:click={()=>deleteElement(el.id,index)}>
 					<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path d="M1 1.00006L11 11.0001M1 11.0001L11 1.00006" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -154,6 +153,13 @@
 			
 			</li>
 			{/each}
+			{:else}
+				{#if loading}
+					<p class="text-center">Loading...</p>
+				{:else}
+					<p class="text-center">todo is empty :(</p>
+				{/if}
+			{/if}
 		</ul>
 	</div>
 
@@ -162,7 +168,7 @@
 <style>
 	li.active {
 		opacity: 0.8;
-		background-color: #eee;
+		background-color: rgb(224, 224, 224);
 		transition: 1s;
 	}
 	li {
@@ -173,8 +179,10 @@
 		white-space: nowrap;
 		position: absolute;
 		right: calc(100% + 10px);
+		top: 50%;
+		transform: translateY(-50%);
 		font-size: 12px;
-		padding: 4px 10px;
+		padding: 2px 6px;
 		font-weight: 700;
 		background-color: rgb(25, 91, 177);
 		color: #fff;
@@ -193,17 +201,10 @@
 	.editmode {
 		transition: 0.4s;
 		position: relative;
+		border: 1px rgb(138, 39, 219) solid;
 	}
 	.editmode::before {
 		content: 'editing';
-		position: absolute;
-		right: calc(100% + 10px);
-		font-size: 12px;
-		padding: 4px 10px;
-		font-weight: 700;
 		background-color: rgb(138, 39, 219);
-		color: #fff;
-		border-radius: 6px;
-		text-transform: uppercase;
 	}
 </style>
