@@ -3,13 +3,15 @@
 		onMount
 	} from "svelte";
 	const endpoint = "https://yolly.pro/api/todo";
-	let todoList = [];
+	
+	$: todoList = [];
 
 	onMount(async function () {
 		const response = await fetch(endpoint);
 		todoList = await response.json();
 		loading = false;
 	});
+
 	let loading = true;
 	let valueInput = null;
 	let updateValue = null;
@@ -19,8 +21,23 @@
 	let updateIndex = null;
 	let error = false;
 	let errorMsg = null;
+	let countDone = 0;
+	let countNotDone = 0;
 
 	$: count = todoList.length;
+
+	$: checkIt = function(){
+		countDone = countNotDone = 0;
+		todoList.forEach(function(e){
+			if(e.status == 1){
+				countDone++;
+			}
+			else {
+				countNotDone++;
+			}
+		})
+	}();
+
 
 
 	async function deleteElement(id, index) {
@@ -52,7 +69,7 @@
 		todoList = [json, ...todoList];
 		updateValue = activeStatus =  activeIndex = updateIndex = valueInput = '';
 
-		}
+	}
 		else {
 			error = true;
 			errorMsg = 'Cannot be empty';
@@ -119,12 +136,20 @@
 <div class="container mx-auto mt-5">
 
 	<div class="flex justify-center items-center">
+		<div class="">
+		
+		<div class="border rounded px-4 py-2 mb-8">
+			<p class="py-2 text-sm">List length: {count}</p>
+			<p class="py-2 text-sm">Done tasks: {countDone}</p>
+			<p class="py-2 text-sm">Not finished tasks: {countNotDone}</p>
+		</div>
 		<input type="text" bind:value={valueInput} placeholder="Type here...." class="px-3 py-2 rounded border">
 		<button class="ml-2 px-2 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded border" on:click={createNewEl}>Create</button>
+		</div>
+			
 	</div>
 
 	<div class="w-1/3 mx-auto border rounded px-4 py-4 mt-10">
-		<p class="py-2 text-sm">List length: {count	}</p>
 		<div class="{error == false ? 'hidden' : ''} bg-rose-600 rounded flex py-2 my-4 justify-center text-white">
 			{errorMsg}
 		</div>
