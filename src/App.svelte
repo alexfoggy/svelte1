@@ -1,4 +1,6 @@
 <script>
+  	import CircularProgress from '@smui/circular-progress';
+
 	import {
 		onMount
 	} from "svelte";
@@ -19,6 +21,9 @@
 	let updateIndex = null;
 	let error = false;
 	let errorMsg = null;
+
+	$: count = todoList.length;
+
 
 	async function deleteElement(id, index) {
 		const res = await fetch('https://yolly.pro/api/todo/delete', {
@@ -109,8 +114,12 @@
 			updateIndex = index;
 		}
 	}
-</script>
 
+  </script>
+   
+   <div style="display: flex; justify-content: center">
+   <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+</div>
 <div class="container mx-auto mt-5">
 
 	<div class="flex justify-center items-center">
@@ -119,7 +128,7 @@
 	</div>
 
 	<div class="w-1/3 mx-auto border rounded px-4 py-4 mt-10">
-
+		<p class="py-2 text-sm">List length: {count	}</p>
 		<div class="{error == false ? 'hidden' : ''} bg-rose-600 rounded flex py-2 my-4 justify-center text-white">
 			{errorMsg}
 		</div>
@@ -155,7 +164,9 @@
 			{/each}
 			{:else}
 				{#if loading}
-					<p class="text-center">Loading...</p>
+					<div style="display: flex; justify-content: center">
+ 						 <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+					</div>	
 				{:else}
 					<p class="text-center">todo is empty :(</p>
 				{/if}
@@ -164,7 +175,7 @@
 	</div>
 
 </div>
-
+<link rel="stylesheet" href="/smui.css" />
 <style>
 	li.active {
 		opacity: 0.8;
