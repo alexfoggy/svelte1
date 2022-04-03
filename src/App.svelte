@@ -1,6 +1,4 @@
 <script>
-  	import CircularProgress from '@smui/circular-progress';
-
 	import {
 		onMount
 	} from "svelte";
@@ -117,9 +115,7 @@
 
   </script>
    
-   <div style="display: flex; justify-content: center">
-   <CircularProgress style="height: 32px; width: 32px;" indeterminate />
-</div>
+
 <div class="container mx-auto mt-5">
 
 	<div class="flex justify-center items-center">
@@ -164,9 +160,7 @@
 			{/each}
 			{:else}
 				{#if loading}
-					<div style="display: flex; justify-content: center">
- 						 <CircularProgress style="height: 32px; width: 32px;" indeterminate />
-					</div>	
+					<p class="text-center">Loading...</p>
 				{:else}
 					<p class="text-center">todo is empty :(</p>
 				{/if}
