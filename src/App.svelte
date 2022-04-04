@@ -236,9 +236,10 @@ async function openComments(id,index){
 				<div class="flex">
 						<div class="{commentIndex == el.id ? 'active' : ''} chatopen ml-1 px-2 py-2 cursor-pointer bg-green-500 hover:bg-green-600 transition
 						text-white flex justify-center items-center rounded" on:click={()=>openComments(el.id,index)}>
-						<svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M10 19C14.9706 19 19 14.9706 19 10C19 5.02944 14.9706 1 10 1C5.02944 1 1 5.02944 1 10C1 11.4876 1.36093 12.891 2 14.1272L1 19L5.8728 18C7.10904 18.6391 8.51237 19 10 19Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-						</svg>
+						<svg width="12" height="14" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M9.58579 1.58579C9.21071 1.21071 8.70201 1 8.17157 1H1V8.17157C1 8.70201 1.21071 9.21071 1.58579 9.58579L8.58579 16.5858C9.36683 17.3668 10.6332 17.3668 11.4142 16.5858L16.5858 11.4142C17.3668 10.6332 17.3668 9.36684 16.5858 8.58579L9.58579 1.58579Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							<rect x="6" y="6" width="0.01" height="0.01" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+							</svg>
 						</div>
 				
 					<div class="{el.status == true ? 'hidden' : ''} {activeStatus == el.id ? 'active' : ''} ml-1 editbutton px-1 cursor-pointer bg-blue-600 hover:bg-blue-800 transition
@@ -276,7 +277,7 @@ async function openComments(id,index){
 	</div>
 	{#if commentStatus == true}
 	<div class="border rounded ml-10 mt-10 px-5 py-3 relative">
-		<div class="cursor-pointer hover:opacity-50 absolute top-1.5 right-1.5" on:click={()=>{commentStatus = !commentStatus;commentIndex = 0}}>
+		<div class="cursor-pointer hover:opacity-50 absolute top-1.5 right-1.5" on:click={()=>{commentStatus = !commentStatus;commentIndex = 0;comments = '';}}>
 			<svg width="12" height="12" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path d="M1.00024 1L5.00024 5M1.00024 5L5.00024 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 			</svg>
