@@ -161,7 +161,7 @@
 
 	async function createComment(id){
 		if(commentValue != ''){
-		const res = await fetch('http://chat/api/todo/comment/create', {
+		const res = await fetch('https://yolly.pro/api/todo/comment/create', {
 			method: 'POST',
 			body: JSON.stringify({
 				commentValue,
@@ -186,7 +186,7 @@ async function openComments(id,index){
 		
 		loadingComments = true;
 		
-		const response = await fetch('http://chat/api/todo/comment/show/'+id);
+		const response = await fetch('https://yolly.pro/api/todo/comment/show/'+id);
 		comments = await response.json();
 
 		loadingComments = false;
@@ -236,7 +236,6 @@ async function openComments(id,index){
 					{el.value}
 				</span>
 				<div class="flex">
-
 						<div class="{commentIndex == el.id ? 'active' : ''} chatopen ml-1 px-2 py-2 cursor-pointer bg-green-500 hover:bg-green-600 transition
 						text-white flex justify-center items-center rounded" on:click={()=>openComments(el.id,index)}>
 						<svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
