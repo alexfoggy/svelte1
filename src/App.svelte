@@ -151,11 +151,9 @@
 	function search(){
 		if(searchInput === ''){
 			todoList = todoListGot.slice(0,limit);
-			console.log(searchInput);
-
 		}
 		else {
-			todoList = todoListGot.filter(elem => elem.value.indexOf(searchInput) !== -1);
+			todoList = todoListGot.filter(elem => elem.value.toLowerCase().indexOf(searchInput.toLowerCase()) !== -1);
 		}
 	}
 
