@@ -4,11 +4,23 @@
 	} from "svelte";
 	const endpoint = "https://yolly.pro/api/todo";
 	
-	$: todoList = [];
+
+	let seeMore = false;
+	$: limit = 6;
+	$: todoListGot = [];
+	$: todoList = todoListGot.slice(0,limit);
+	$: seeMoreCheck = function(){
+		if(todoListGot.length > limit){
+			seeMore = true;
+		}
+		else {
+			seeMore = false;
+		}
+	}()
 
 	onMount(async function () {
 		const response = await fetch(endpoint);
-		todoList = await response.json();
+		todoListGot = await response.json();
 		loading = false;
 	});
 
@@ -24,11 +36,11 @@
 	let countDone = 0;
 	let countNotDone = 0;
 
-	$: count = todoList.length;
+	$: count = todoListGot.length;
 
 	$: checkIt = function(){
 		countDone = countNotDone = 0;
-		todoList.forEach(function(e){
+		todoListGot.forEach(function(e){
 			if(e.status == 1){
 				countDone++;
 			}
@@ -37,7 +49,6 @@
 			}
 		})
 	}();
-
 
 
 	async function deleteElement(id, index) {
@@ -50,8 +61,8 @@
 
 		const json = await res.json()
 
-		todoList.splice(index, 1)
-		todoList = todoList;
+		todoListGot.splice(index, 1)
+		todoListGot = todoListGot;
 	}
 
 	async function createNewEl() {
@@ -66,9 +77,9 @@
 
 		const json = await res.json();
 
-		todoList = [json, ...todoList];
+		todoListGot = [json, ...todoListGot];
 		updateValue = activeStatus =  activeIndex = updateIndex = valueInput = '';
-
+		limit++;
 	}
 		else {
 			error = true;
@@ -88,7 +99,7 @@
 			}, 3000);
 	}
 	else {
-		todoList[index].status = !todoList[index].status;
+		 todoListGot[index].status = !todoList[index].status;
 		const res = await fetch('https://yolly.pro/api/todo/changestatus', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -191,6 +202,13 @@
 				{/if}
 			{/if}
 		</ul>
+		{#if seeMore == true}
+		<div class="flex justify-center">
+			<span on:click="{()=>{limit += 3}}" class="text-white bg-emerald-500 rounded px-3 cursor-pointer hover:bg-emerald-600 duration-500 py-1">
+				See more
+			</span>
+		</div>
+		{/if}
 	</div>
 
 </div>
