@@ -24,6 +24,7 @@
 		loading = false;
 	});
 	let searchInput = '';
+	let searchStatus = false;
 	let loading = true;
 	let valueInput = null;
 	let updateValue = null;
@@ -151,9 +152,11 @@
 	function search(){
 		if(searchInput === ''){
 			todoList = todoListGot.slice(0,limit);
+			searchStatus = false;
 		}
 		else {
 			todoList = todoListGot.filter(elem => elem.value.toLowerCase().indexOf(searchInput.toLowerCase()) !== -1);
+			searchStatus = true;
 		}
 	}
 
@@ -267,7 +270,7 @@ async function openComments(id,index){
 				{/if}
 			{/if}
 		</ul>
-		{#if seeMore == true}
+		{#if seeMore == true && searchStatus == false}
 		<div class="flex justify-center">
 			<span on:click="{()=>{limit += 3}}" class="text-white bg-emerald-500 rounded px-3 cursor-pointer hover:bg-emerald-600 duration-500 py-1">
 				See more
